@@ -4,6 +4,7 @@ metadata:
   name: nginx-pod
   labels:
     app: nginx
+  namespace: default
 spec:
   containers:
     - name: nginx
