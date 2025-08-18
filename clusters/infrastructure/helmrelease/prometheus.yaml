@@ -42,17 +42,23 @@ spec:
     # `vector(1)` and will be active immediately — useful for validating the
     # alerting pipeline (prometheus -> alertmanager -> receivers).
     additionalPrometheusRulesMap:
-      test-alerts:
+      node-high-cpu:
         groups:
-          - name: test.rules
+          - name: node.rules
             rules:
-              - alert: TestAlert
-                expr: vector(1)
+              - alert: NodeHighCPUUsage
+                expr: |
+                  (1 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[5m]))
+                    / avg by (instance) (irate(node_cpu_seconds_total[5m])))) * 100 > 80
+                for: 5m
                 labels:
-                  severity: warning
+                  severity: critical
                 annotations:
-                  summary: "Test alert from kube-prometheus-stack"
-                  description: "This alert is generated to validate alert delivery and rules provisioning."
+                  summary: "Node CPU usage is above 80%"
+                  description: |
+                    Node {{ $labels.instance }} CPU usage is > 80% for more than 5 minutes.
+                    Value: {{ printf "%.2f" $value }}%
+                    This indicates the node is under high CPU pressure and may affect pods running on it.
 
     grafana:
       enabled: true
