@@ -1,0 +1,23 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  chart:
+    spec:
+      chart: cert-manager
+      version: v1.17.0
+      sourceRef:
+        kind: HelmRepository
+        name: cert-manager
+        namespace: flux-system
+  interval: 8h0m0s
+  install:
+    createNamespace: true
+  targetNamespace: cert-manager
+  values:
+    fullnameOverride: "cert-manager"
+    crds:
+      enabled: true
+    dns01RecursiveNameservers: "1.1.1.1:53"
