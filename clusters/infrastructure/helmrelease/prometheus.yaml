@@ -67,11 +67,11 @@ spec:
         ingressClassName: nginx
         annotations:
           kubernetes.io/ingress.class: nginx
-          # nginx.ingress.kubernetes.io/ssl-redirect: "true"
+          nginx.ingress.kubernetes.io/ssl-redirect: "true"
         hosts:
           - grafana.stag.devkuban.com
-        # tls:
-        #   - secretName: wildcard-stag-devkuban-com-tls
-        #     hosts:
-        #       - grafana.stag.devkuban.com
+        tls:
+          - secretName: wildcard-stag-devkuban-com-tls
+            hosts:
+              - grafana.stag.devkuban.com
     
